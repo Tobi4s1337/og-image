@@ -43,8 +43,11 @@ function getCss(theme: string, fontSize: string) {
 
     body {
         background: ${background};
-        background-image: url("https://i.imgur.com/pVW76S2.png");
-        background-size: 100px 100px;
+        background-image: url("https://i.imgur.com/i2Phhv3.jpg");
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
         height: 100vh;
         display: flex;
         text-align: center;
@@ -91,18 +94,25 @@ function getCss(theme: string, fontSize: string) {
         margin: 0 .05em 0 .1em;
         vertical-align: -0.1em;
     }
-    
+    .subtitle {
+        margin-top: -180px;
+        font-family: 'Inter', sans-serif;
+        color: white;
+        text-shadow: 1px 2px 5px rgba(0,0,0,0.66);
+    }
+
     .heading {
+        margin-top: -100px;
+        text-shadow: 1px 2px 5px rgba(0,0,0,0.66);
         font-family: 'Inter', sans-serif;
         font-size: ${sanitizeHtml(fontSize)};
         font-style: normal;
         color: ${foreground};
-        line-height: 1.8;
     }`;
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-    const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
+    const { text, text2, theme, md, fontSize } = parsedReq;
     return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
@@ -114,31 +124,15 @@ export function getHtml(parsedReq: ParsedRequest) {
     <body>
         <div>
             <div class="spacer">
-            <div class="logo-wrapper">
-                ${images.map((img, i) =>
-                    getPlusSign(i) + getImage(img, widths[i], heights[i])
-                ).join('')}
-            </div>
-            <div class="spacer">
-            <div class="heading">${emojify(
+            <div class="heading" style="font-size: 200px">${emojify(
                 md ? marked(text) : sanitizeHtml(text)
+            )}
+            </div>
+            <div class="subtitle"  style="font-size: 100px; font-weight: 800;">${emojify(
+                md ? marked(text2) : sanitizeHtml(text2)
             )}
             </div>
         </div>
     </body>
 </html>`;
-}
-
-function getImage(src: string, width ='auto', height = '225') {
-    return `<img
-        class="logo"
-        alt="Generated Image"
-        src="${sanitizeHtml(src)}"
-        width="${sanitizeHtml(width)}"
-        height="${sanitizeHtml(height)}"
-    />`
-}
-
-function getPlusSign(i: number) {
-    return i === 0 ? '' : '<div class="plus">+</div>';
 }
